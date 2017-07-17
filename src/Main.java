@@ -11,8 +11,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class Main {
 
-    private String filename;
-
     public static void main(String[] args) {
         if (args.length != 1) {
             System.out.println("Check file path syntax.");
