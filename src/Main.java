@@ -36,11 +36,33 @@ public class Main {
         System.setProperty("webdriver.chrome.driver", "C:\\Projects\\scoretracker-bot\\chromedriver.exe");
         WebDriver driver=new ChromeDriver();
         driver.get("https://onlinescoretracker.com/user-panel/students");
+        if (driver.getTitle().equals("Online Score Tracker")) {
+            String prefix = args[1];
+            String uname = args[2];
+            String pw = args[3];
+            login(driver, prefix, uname, pw);
+        }
 
+        WebElement searchbox = driver.findElement(By.name("form-search-input"));
+        searchbox.sendKeys("fone");
 
 //        WebElement q = driver.findElement(By.name("q"));
 //        q.sendKeys("hello world");
 //        q.submit();
+    }
+
+    private static void login(WebDriver driver, String prefix, String uname, String pw) {
+        WebElement prefixBox = driver.findElement(By.name("uname_prefix"));
+        prefixBox.sendKeys(prefix);
+
+        WebElement unameBox = driver.findElement(By.name("username"));
+        unameBox.sendKeys(uname);
+
+        WebElement pwBox = driver.findElement(By.name("password"));
+        pwBox.sendKeys(pw);
+
+        WebElement submit = driver.findElement(By.id("submit"));
+        submit.submit();
     }
 
     private static void readWriteFile(XSSFWorkbook workbook) {
