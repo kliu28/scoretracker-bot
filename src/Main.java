@@ -56,6 +56,11 @@ public class Main {
         //WebElement studentTable = driver.findElement(By.xpath("//*[@id=\"studentDataTable\"]/tbody/tr/td[2]/a"));
         List<WebElement> elems = driver.findElements(By.xpath("//*[@id=\"studentDataTable\"]"));
         System.out.println("num rows: " + elems.size());
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            System.out.println("Thread sleep failed");
+        }
         WebElement student = elems.get(0).findElement(By.xpath("//a[contains(@href, \"studentSummary\")]"));
         System.out.println(student.getText());
         student.click();
