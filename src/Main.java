@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import java.util.List;
 
 /**
  * Created by Katherine Liu on 7/16/2017.
@@ -41,10 +42,56 @@ public class Main {
             String uname = args[2];
             String pw = args[3];
             login(driver, prefix, uname, pw);
+            driver.get("https://onlinescoretracker.com/user-panel/students");
         }
 
-        WebElement searchbox = driver.findElement(By.name("form-search-input"));
+        WebElement searchbox = driver.findElement(By.id("form-search-input"));
         searchbox.sendKeys("fone");
+
+        //ABOVE THIS LINE IS CLEARED.
+
+
+        //*[@id="studentDataTable"]/tbody/tr/td[2]/a
+        //driver.findElement(By.xpath("//*[@id=\"studentDataTable\"]/tbody/tr/td[2]/a")).click();
+        //WebElement studentTable = driver.findElement(By.xpath("//*[@id=\"studentDataTable\"]/tbody/tr/td[2]/a"));
+        List<WebElement> elems = driver.findElements(By.xpath("//*[@id=\"studentDataTable\"]"));
+        System.out.println("num rows: " + elems.size());
+        WebElement student = elems.get(0).findElement(By.xpath("//a[contains(@href, \"studentSummary\")]"));
+        System.out.println(student.getText());
+        student.click();
+
+//        System.out.println(driver.findElement(By.xpath("//*[@id=\"studentDataTable\"]/tbody/tr/td[2]/a")).getText());
+//        System.out.println(elems.get(0).findElement(By.xpath("//*[@id=\"studentDataTable\"]/tbody/tr/td[2]/a")).getText());
+//        WebElement studentTable = driver.findElement(By.xpath("//*[@id=\"studentDataTable\"]"));
+//        List<WebElement> rows = studentTable.findElements(By.tagName("tr"));
+//        System.out.println("num rows: " + rows.size());
+//        for (WebElement row : rows) {
+//            List<WebElement> cols = row.findElements(By.tagName("td"));
+//            for (WebElement col : cols) {
+//                System.out.print(col.getText());
+//            }
+//            System.out.println();
+//        }
+
+
+// for (WebElement trElem : elems) {
+//            List<WebElement> tds = trElem.findElements(By.xpath("td"));
+//            //*[@id="studentDataTable"]/tbody/tr/td[2]/a
+//            System.out.println("num cols: " + tds.size());
+//            for (WebElement tdElem : tds) {
+//                System.out.print(tdElem.getText());
+//            }
+//            System.out.println();
+//        }
+//        List<WebElement> elems = driver.findElements(By.xpath("//*[@id='studentDataTable']"));
+//        System.out.println("elems size: " + elems.size());
+
+        //*[@id="studentDataTable"]
+//        List<WebElement> cells = elems.get(0).findElements(By.tagName("td"));
+//        System.out.println("cells size: " + cells.size());
+//        cells.get(1).click();
+        //elems.get(1).click();
+//        driver.findElement(By.xpath("//img[@ src='images/icon_edit.png']")).click();
 
 //        WebElement q = driver.findElement(By.name("q"));
 //        q.sendKeys("hello world");
