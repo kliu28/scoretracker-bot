@@ -33,6 +33,7 @@ public class Main {
 //            System.out.println("Invalid file path.");
 //            return;
 //        }
+        long TIME = 1000;
 
         System.setProperty("webdriver.chrome.driver", "C:\\Projects\\scoretracker-bot\\chromedriver.exe");
         WebDriver driver=new ChromeDriver();
@@ -46,7 +47,8 @@ public class Main {
         }
 
         WebElement searchbox = driver.findElement(By.id("form-search-input"));
-        searchbox.sendKeys("fone");
+        String studentName = "fone";
+        searchbox.sendKeys(studentName);
 
         //ABOVE THIS LINE IS CLEARED.
 
@@ -56,14 +58,60 @@ public class Main {
         //WebElement studentTable = driver.findElement(By.xpath("//*[@id=\"studentDataTable\"]/tbody/tr/td[2]/a"));
         List<WebElement> elems = driver.findElements(By.xpath("//*[@id=\"studentDataTable\"]"));
         System.out.println("num rows: " + elems.size());
-        try {
-            Thread.sleep(1000);
-        } catch (Exception e) {
-            System.out.println("Thread sleep failed");
-        }
+        sleep(TIME);
         WebElement student = elems.get(0).findElement(By.xpath("//a[contains(@href, \"studentSummary\")]"));
         System.out.println(student.getText());
         student.click();
+        //http://www.testerlogic.com/handling-dynamic-elements-in-selenium-webdriver/
+
+//        //THIS WORKS FOR TOP ONLY THOUGH
+//        try {
+//            Thread.sleep(TIME);
+//        } catch (Exception e) { System.out.println("Thread sleep failed"); }
+//        WebElement edit = driver.findElement(By.xpath("//a[contains(@href, \"editStudentResponse\")]"));
+//        edit.click();
+
+        //todo: try to differentiate by test id
+        String testid = "#5";
+        sleep(TIME);
+        List<WebElement> rows = driver.findElements(By.className("students-lastname"));
+        WebElement row = null;
+        for (WebElement i : rows) {
+            if (i.getText().contains(testid)) {
+                row = i;
+                break;
+            }
+        }
+        if (row == null) {
+            System.out.println("Score data for student username " + studentName
+                    + " and test ID " + testid + " not found.");
+        }
+        else {
+            System.out.println(row.getText());
+            WebElement edit = row.findElement(By.xpath(".//a[contains(@href, \"editStudentResponse\")]"));
+            edit.click();
+
+            sleep(TIME);
+            WebElement essay = driver.findElement(By.xpath(".//*[@id=\"tabs1\"]/ul/li[5]/a"));
+            essay.click();
+
+            sleep(TIME);
+            WebElement scoresBlock = driver.findElement(By.className("essay_score_block"));
+            System.out.println(scoresBlock.getText());
+            List<WebElement> scoresEntry = scoresBlock.findElements(By.xpath(".//input[@type='text']"));
+            System.out.println(scoresEntry.size());
+            String readingScore = "7";
+            String analysisScore = "5";
+            String writingScore = "7";
+            scoresEntry.get(0).sendKeys(readingScore);
+            scoresEntry.get(1).sendKeys(analysisScore);
+            scoresEntry.get(2).sendKeys(writingScore);
+
+            WebElement submit = driver.findElement(By.xpath("//input[@type='submit']"));
+            submit.click();
+        }
+        //go back to start of loop: open students again
+
 
 //        System.out.println(driver.findElement(By.xpath("//*[@id=\"studentDataTable\"]/tbody/tr/td[2]/a")).getText());
 //        System.out.println(elems.get(0).findElement(By.xpath("//*[@id=\"studentDataTable\"]/tbody/tr/td[2]/a")).getText());
@@ -101,6 +149,12 @@ public class Main {
 //        WebElement q = driver.findElement(By.name("q"));
 //        q.sendKeys("hello world");
 //        q.submit();
+    }
+
+    private static void sleep(long time) {
+        try{
+            Thread.sleep(time);
+        } catch (Exception e) { System.out.println("Thread sleep failed"); }
     }
 
     private static void login(WebDriver driver, String prefix, String uname, String pw) {
